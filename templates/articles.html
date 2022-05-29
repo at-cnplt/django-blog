@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+<h3>Makaleler</h3>
+<hr>
+<div class = "row ml-auto">
+
+<form>
+{% csrf_token %}
+<input type="text" name = "keyword" class="input-sm" placeholder="Makale ara">
+<button type = "submit" class = "btn btn-primary">Ara</button>
+</form>
+</div>
+{% if articles %}
+{% for article in articles %}
+
+    <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h2><a href="{% url 'article:detail' article.id %}">{{article.title}}</a></h2>
+                            <!-- Post meta content-->
+                            <div class="text-muted fst-italic mb-2">{{article.created_date}}</div>
+                            <!-- Post categories-->
+                            <div class ="text-muted fst-italic mb-3">{{article.author}} tarafından yayınlandı.</div>
+                            {% if article.article_image %}
+                            <figure class="mb-4"><img class="img-fluid rounded" src="{{article.article_image.url}}" alt="..." /></figure>
+
+                            {% endif %}
+                        </header>
+                        <section class="mb-5">
+                            <p>
+                            {{article.content|safe|truncatewords:50}}
+                            <a href="{% url 'article:detail' article.id %}" class= "btn btn-danger">Devamını oku...</a> 
+                            </p> 
+                        </section>
+
+
+                    </article>                        
+                
+                </div>
+
+
+{% endfor %}
+
+
+
+{% else %}
+<div class= "alert alert-danger">
+Makale Bulunamadı!
+</div>
+
+
+{% endif %}
+
+
+
+
+{% endblock body %}
